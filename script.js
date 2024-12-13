@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Обработчики для элементов портфолио
     const portfolioItems = document.querySelectorAll('.portfolio-item');
 
     portfolioItems.forEach(item => {
@@ -16,43 +17,42 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Код для формы обратной связи
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('feedback-form'); // Получаем форму
-        const responseText = document.getElementById('response'); // Параграф для ответа сервера
-    
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Отменяем стандартное поведение формы (перезагрузка страницы)
-            
-            // Получаем данные из формы
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
-    
-            try {
-                // Отправляем POST-запрос на сервер
-                const res = await fetch('https://afworks-portfolio.onrender.com/feedback', { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, message }),
-                });
-    
-                // Обрабатываем ответ от сервера
-                if (res.ok) {
-                    const text = await res.text();
-                    responseText.textContent = text; // Выводим сообщение об успешной отправке
-                    responseText.style.color = 'green'; 
-                } else {
-                    responseText.textContent = 'Ошибка на сервере!';
-                    responseText.style.color = 'red';
-                }
-            } catch (error) {
-                // Обработка ошибок запроса
-                responseText.textContent = 'Ошибка отправки данных!';
+    const form = document.getElementById('feedback-form'); // Получаем форму
+    const responseText = document.getElementById('response'); // Параграф для ответа сервера
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Отменяем стандартное поведение формы (перезагрузка страницы)
+        
+        // Получаем данные из формы
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        try {
+            // Отправляем POST-запрос на сервер
+            const res = await fetch('https://afworks-portfolio.onrender.com/feedback', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, message }),
+            });
+
+            // Обрабатываем ответ от сервера
+            if (res.ok) {
+                responseText.textContent = 'Обратная связь получена!'; // Успешный ответ
+                responseText.style.color = 'green'; 
+            } else {
+                // Если сервер вернул ошибку
+                const errorMessage = await res.text(); // Получаем сообщение об ошибке
+                responseText.textContent = `Ошибка отправки данных: ${errorMessage}`;
                 responseText.style.color = 'red';
             }
-    
-            // Очистка формы после отправки
-            form.reset();
-        });
+        } catch (error) {
+            // Обработка сетевых ошибок или исключений
+            responseText.textContent = `Ошибка отправки данных: ${error.message}`;
+            responseText.style.color = 'red';
+        }
+
+        // Очистка формы после отправки
+        form.reset();
     });
-    
+});
