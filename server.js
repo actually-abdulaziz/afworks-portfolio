@@ -20,8 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Обработка главной страницы (для GET-запросов на /)
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));  // Путь к вашему index.html
+    res.send('Добро пожаловать на мой сервер!');
 });
+
 
 // Запуск сервера
 app.listen(PORT, () => {
