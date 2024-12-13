@@ -73,14 +73,15 @@
             <h2>Есть вопросы?</h2>
             <p>Заполните форму и я свяжусь с вами в ближайшее время</p>
         </div>
-        <form>
-            <input type="text" placeholder="Имя">
-            <input type="email" placeholder="Эл.почта">
-            <textarea placeholder="Чем могу помочь?"></textarea>
+        <form id="feedback-form">
+            <input type="text" id="name" placeholder="Имя" required />
+            <input type="email" id="email" placeholder="Эл.почта" required />
+            <textarea id="message" placeholder="Чем могу помочь?" required></textarea>
             <div class="button-container">
                 <button type="submit">Отправить</button>
             </div>
         </form>
+        <p id="response"></p>
     </section>
 
     <footer>
@@ -97,9 +98,9 @@
                 <img src="images/logo.svg" alt="Logo">
             </div>
             <div class="social-media">
-                <a href="#"><img src="images/teleg.png" alt="Telegram"></a>
-                <a href="#"><img src="images/inst.png" alt="Instagram"></a>
-                <a href="#"><img src="images/pint.png" alt="Pinterest"></a>
+                <a href="https://t.me/actually_abdulaziz"><img src="images/teleg.png" alt="Telegram"></a>
+                <a href="https://www.instagram.com/actually_abdulaziz"><img src="images/inst.png" alt="Instagram"></a>
+                <a href="https://www.pinterest.com/actually_abdulaziz"><img src="images/pint.png" alt="Pinterest"></a>
             </div>
         </div>
     </footer>        
