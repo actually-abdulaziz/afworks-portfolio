@@ -1,0 +1,381 @@
+body {
+    background-color: #bcbcbc;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    margin-bottom: 0;
+}
+
+.logo-container {
+    width: 150px;
+    margin-left: 50px;
+}
+
+.logo {
+    width: 100%;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 100px;
+    padding-right: 50px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #000;
+    position: relative;
+    font-weight: 600;
+    font-size: 150%;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    bottom: -15px;
+    left: 0;
+    background-color: #000;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.3s ease-in-out;
+}
+
+nav a:hover::after {
+    visibility: visible;
+    transform: scaleX(1);
+}
+
+.welcome-container {
+    margin-top: 0;
+    overflow: hidden;
+}
+
+.welcome {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.welcome-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: brightness(50%); /* Применение затемнения */
+}
+
+.welcome-text p.smaller-text {
+    margin-bottom: 30px; /* Увеличение расстояния между абзацами */
+}
+
+.welcome-text .resume-image {
+    width: 30%; /* Уменьшение размера картинки */
+    height: auto;
+    margin-top: 20px; /* Добавление отступа сверху */
+
+}
+
+.welcome-text {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    transform: translateY(0);
+    width: calc(100% - 100px);
+    text-align: left;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1.5em;
+    background: none; /* Убираем затемнение с текста */
+}
+
+.welcome-text h1 {
+    font-size: 3em;
+    margin-bottom: 50px;
+}
+
+.welcome-text p {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.welcome-text .smaller-text {
+    font-size: 1em;
+    margin-bottom: 30px;
+}
+
+
+.portfolio-category h2 {
+    font-size: 3em;
+}
+
+.portfolio {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-item .text {
+    position: relative;
+    height: 100%; /* Занять всю высоту контейнера */
+    text-align: center; /* Центрировать текст */
+}
+
+.portfolio-item .text h2 {
+    font-size: 3em; /* Размер шрифта для заголовков */
+    margin-bottom: 10px;
+    position: absolute;
+    left: 50%; /* Центрирование по горизонтали */
+    top: 50%; /* Центрирование по вертикали */
+    transform: translate(-50%, -50%); /* Центрирование по горизонтали и вертикали */
+    white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+.portfolio-item .text p {
+    font-size: 1em; /* Размер шрифта для подзаголовка */
+    position: absolute;
+    left: 50%; /* Центрирование по горизонтали */
+    bottom: 10px; /* Расположение снизу */
+    transform: translateX(-50%); /* Центрирование по горизонтали */
+    white-space: nowrap; /* Запрещаем перенос текста */
+}
+
+.portfolio-item img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+.portfolio-item .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.portfolio-item:hover img {
+    filter: brightness(70%);
+    transform: scale(1.1);
+}
+
+.portfolio-item:hover .overlay {
+    opacity: 1;
+}
+
+.overlay .text {
+    text-align: left;
+    color: #fff;
+    padding: 20px;
+}
+
+.contact-form {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between; /* Разделяем текст и форму */
+    align-items: flex-start; /* Выравнивание по началу */
+}
+
+.contact-text {
+    width: 40%; /* Ширина для текстового блока */
+    text-align: left;
+    padding-left: 50px; /* Отступ слева для текста */
+}
+
+.contact-form h2 {
+    font-size: 3em; /* Размер шрифта для заголовка */
+    margin-bottom: 10px; /* Уменьшаем отступ между заголовком и подзаголовком */
+}
+
+.contact-form p {
+    font-size: 1.5em; /* Размер шрифта для подзаголовка */
+    margin-top: 0; /* Убираем верхний отступ */
+}
+
+.contact-form form {
+    width: calc(50% - 50px); /* Ширина формы с учетом отступа 50px */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 50px; /* Отступ слева для формы */
+    padding-right: 50px; /* Отступ справа для формы */
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 10px;
+    border: 1px solid #000; /* Видимые границы */
+    border-radius: 5px;
+    width: 100%;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Центрирование кнопки по горизонтали */
+    margin: 0;
+    width: 100%;
+}
+
+.contact-form button {
+    padding: 10px;
+    background-color: #bcbcbc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 200px; /* Уменьшаем ширину кнопки */
+    margin-top: 10px; /* Отступ сверху для кнопки */
+}
+
+.contact-form button:hover {
+    background-color: #a0a0a0;
+}
+
+footer {
+    background-color: #bcbcbc;
+    padding: 20px 50px; /* Отступы 50px по краям */
+    display: flex;
+    flex-direction: column;
+}
+
+footer nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between; /* Расположение граф по ширине страницы */
+    padding: 0;
+}
+
+footer nav ul li {
+    display: inline;
+}
+
+footer nav ul li a {
+    text-decoration: none;
+    color: #000;
+    font-weight: 600;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+.footer-logo {
+    width: 150px; /* Размер логотипа */
+    text-align: left;
+}
+
+.footer-logo img {
+    width: 100%;
+}
+
+.social-media {
+    display: flex;
+    justify-content: center; /* Центрируем иконки соцсетей */
+    gap: 120px; /* Увеличиваем расстояние между иконками соцсетей */
+    flex: 1;
+}
+
+.social-media a {
+    width: 50px; /* Размер иконок соцсетей */
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social-media img {
+    width: 100%;
+    height: 100%;
+}
+
+.carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+}
+
+.carousel-item {
+    flex: none;
+    margin-right: 20px;
+    scroll-snap-align: start;
+    text-align: center;
+}
+
+.work-container {
+    width: 720px;
+    height: 400px;
+    background-color: #000; /* Черный фон */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff; /* Белый текст */
+    overflow: hidden; /* Убедиться, что изображения не выходят за рамки контейнера */
+}
+
+.work-container img {
+    max-width: 100%;
+    max-height: 80%; /* Оставляем место для текста */
+    object-fit: contain; /* Масштабировать изображение, сохраняя пропорции */
+}
+
+.work-container p {
+    margin-top: 10px; /* Больше места для текста под работами */
+    padding: 0 10px;
+    text-align: center;
+}
+
+.content-container .content { 
+    padding-left: 50px; /* Отступ 50px от левого края */ 
+}
+
+.content-container .content h2 {
+    font-size: 3em; /* Увеличение заголовков в 1.5 раза */
+}
+
+.content-container .content p {
+    font-size: 1.5em; /* Увеличение основного текста в 1.5 раза */
+}
+
+.contacts-content .contact-details h2 {
+    font-size: 3em; /* Заголовки 3em */
+    margin-bottom: 20px;
+}
+
+.contacts-content .contact-details p {
+    font-size: 2em; /* Пункты 2em */
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center; /* Выравнивание по центру */
+}
+
+.social-icon {
+    width: 50px; /* Размер иконок для социальных сетей */
+    height: auto;
+    margin-right: 20px; /* Отступ справа */
+    vertical-align: middle;
+}
