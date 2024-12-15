@@ -379,3 +379,17 @@ footer nav ul li a {
     margin-right: 20px; /* Отступ справа */
     vertical-align: middle;
 }
+
+/* Кнопка-изображение для скачивания */
+.resume-image {
+    width: 150px; /* Ширина изображения */
+    height: auto; /* Автоматическая высота */
+    cursor: pointer; /* Изменение курсора на указатель */
+    transition: transform 0.3s ease; /* Плавное увеличение */
+}
+
+/* Эффект при наведении */
+.resume-image:hover {
+    transform: scale(1.05); /* Увеличение изображения */
+    opacity: 0.9; /* Легкое затемнение */
+}
