@@ -24,14 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
         portfolioItems.forEach(item => {
             item.addEventListener('mouseenter', function() {
                 this.querySelector('.overlay').style.opacity = '1';
-                this.querySelector('img').style.filter = 'brightness(70%)';
-                this.querySelector('img').style.transform = 'scale(1.1)';
+                this.querySelector('img').classList.add('hovered');
             });
     
             item.addEventListener('mouseleave', function() {
                 this.querySelector('.overlay').style.opacity = '0';
-                this.querySelector('img').style.filter = 'brightness(100%)';
-                this.querySelector('img').style.transform = 'scale(1)';
+                this.querySelector('img').classList.remove('hovered');
             });
         });
     
@@ -58,62 +56,65 @@ document.addEventListener('DOMContentLoaded', function() {
             // Валидация полей формы
             let valid = true;
     
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    
+            // Имя: проверка на пустоту и длину
             if (name === '') {
-                createErrorMessage(document.getElementById('name'), 'Пожалуйста, заполните это поле.');
+                createErrorMessage(document.getElementById('name'), 'Это поле обязательно для заполнения.');
                 valid = false;
             } else if (name.length < 3) {
-                createErrorMessage(document.getElementById('name'), 'Имя должно содержать не менее 3 символов.');
+                createErrorMessage(document.getElementById('name'), 'Имя должно содержать хотя бы 3 символа.');
                 valid = false;
             }
     
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            // Email: проверка на пустоту и формат
             if (email === '') {
-                createErrorMessage(document.getElementById('email'), 'Пожалуйста, заполните это поле.');
+                createErrorMessage(document.getElementById('email'), 'Введите свой email.');
                 valid = false;
             } else if (!emailRegex.test(email)) {
                 createErrorMessage(document.getElementById('email'), 'Пожалуйста, введите корректный email.');
                 valid = false;
             }
     
+            // Сообщение: проверка на пустоту и длину
             if (message === '') {
-                createErrorMessage(document.getElementById('message'), 'Пожалуйста, заполните это поле.');
+                createErrorMessage(document.getElementById('message'), 'Сообщение не может быть пустым.');
                 valid = false;
             } else if (message.length < 10) {
-                createErrorMessage(document.getElementById('message'), 'Сообщение должно содержать не менее 10 символов.');
+                createErrorMessage(document.getElementById('message'), 'Сообщение должно содержать хотя бы 10 символов.');
                 valid = false;
             }
     
+            // Если данные не валидны, прекращаем отправку
             if (!valid) {
-                responseText.textContent = 'Исправьте ошибки перед отправкой.';
+                responseText.textContent = 'Исправьте ошибки и попробуйте снова.';
                 responseText.style.color = 'red';
                 return;
             }
     
             try {
-                // Отправляем POST-запрос на сервер
+                // Отправка данных на сервер с улучшенной обработкой ошибок
                 const res = await fetch('https://afworks-portfolio.onrender.com/feedback', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, message }),
                 });
     
-                // Обрабатываем ответ от сервера
+                // Ответ от сервера
                 if (res.ok) {
-                    responseText.textContent = 'Обратная связь получена!'; // Успешный ответ
+                    responseText.textContent = 'Обратная связь успешно отправлена!';
                     responseText.style.color = 'green'; 
                 } else {
-                    // Если сервер вернул ошибку
-                    const errorMessage = await res.text(); // Получаем сообщение об ошибке
-                    responseText.textContent = `Ошибка отправки данных: ${errorMessage}`;
+                    const errorMessage = await res.json();
+                    responseText.textContent = `Ошибка: ${errorMessage.message || 'Неизвестная ошибка'}`;
                     responseText.style.color = 'red';
                 }
             } catch (error) {
-                // Обработка сетевых ошибок или исключений
                 responseText.textContent = `Ошибка отправки данных: ${error.message}`;
                 responseText.style.color = 'red';
             }
     
-            // Очистка формы после отправки
             form.reset();
         });
     
