@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
             let valid = true;
     
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     
             // Имя: проверка на пустоту и длину
             if (name === '') {
@@ -118,7 +117,15 @@ document.addEventListener('DOMContentLoaded', function() {
             form.reset();
         });
     
+        // Функция для создания сообщений об ошибке
         function createErrorMessage(element, message) {
+            // Проверка на наличие уже существующих сообщений об ошибках
+            const existingError = document.querySelector(`#${element.id}-error`);
+            if (existingError) {
+                existingError.textContent = message;
+                return;
+            }
+    
             const errorMessage = document.createElement('div');
             errorMessage.id = `${element.id}-error`;
             errorMessage.className = 'error-message';
