@@ -17,91 +17,116 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Код для формы обратной связи
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Обработчики для элементов портфолио
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+        portfolioItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.querySelector('.overlay').style.opacity = '1';
+                this.querySelector('img').style.filter = 'brightness(70%)';
+                this.querySelector('img').style.transform = 'scale(1.1)';
+            });
+    
+            item.addEventListener('mouseleave', function() {
+                this.querySelector('.overlay').style.opacity = '0';
+                this.querySelector('img').style.filter = 'brightness(100%)';
+                this.querySelector('img').style.transform = 'scale(1)';
+            });
+        });
+    
+        // Код для формы обратной связи
         const form = document.getElementById('feedback-form');
         const responseText = document.getElementById('response');
     
-        // Функция для очистки от XSS (экранирование спецсимволов)
-        function escapeHTML(str) {
-            return str.replace(/[&<>"']/g, (match) => {
-                const escapeMap = {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#039;',
-                };
-                return escapeMap[match];
-            });
-        }
-    
-        // Функция для валидации email
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-    
-        // Функция для валидации данных
-        function validateFormData(name, email, message) {
-            const errors = [];
-    
-            if (!name || name.length < 2 || name.length > 50) {
-                errors.push('Имя должно содержать от 2 до 50 символов.');
-            }
-    
-            if (!email || !isValidEmail(email)) {
-                errors.push('Введите корректный email-адрес.');
-            }
-    
-            if (!message || message.length < 10 || message.length > 500) {
-                errors.push('Сообщение должно содержать от 10 до 500 символов.');
-            }
-    
-            return errors;
-        }
-    
-        // Обработчик отправки формы
         form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // Отменяем стандартное поведение формы (перезагрузка страницы)
     
-            // Получаем и очищаем ввод
-            const name = escapeHTML(document.getElementById('name').value.trim());
-            const email = escapeHTML(document.getElementById('email').value.trim());
-            const message = escapeHTML(document.getElementById('message').value.trim());
+            // Получаем данные из формы
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
     
-            // Валидируем данные
-            const errors = validateFormData(name, email, message);
+            // Сброс состояния полей
+            const fields = [document.getElementById('name'), document.getElementById('email'), document.getElementById('message')];
+            fields.forEach(field => {
+                field.style.borderColor = ''; // Сброс цвета границы
+                const errorElement = document.querySelector(`#${field.id}-error`);
+                if (errorElement) errorElement.remove(); // Удаление предыдущих сообщений об ошибках
+            });
     
-            if (errors.length > 0) {
-                responseText.textContent = errors.join(' ');
+            // Валидация полей формы
+            let valid = true;
+    
+            if (name === '') {
+                createErrorMessage(document.getElementById('name'), 'Пожалуйста, заполните это поле.');
+                valid = false;
+            } else if (name.length < 3) {
+                createErrorMessage(document.getElementById('name'), 'Имя должно содержать не менее 3 символов.');
+                valid = false;
+            }
+    
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                createErrorMessage(document.getElementById('email'), 'Пожалуйста, заполните это поле.');
+                valid = false;
+            } else if (!emailRegex.test(email)) {
+                createErrorMessage(document.getElementById('email'), 'Пожалуйста, введите корректный email.');
+                valid = false;
+            }
+    
+            if (message === '') {
+                createErrorMessage(document.getElementById('message'), 'Пожалуйста, заполните это поле.');
+                valid = false;
+            } else if (message.length < 10) {
+                createErrorMessage(document.getElementById('message'), 'Сообщение должно содержать не менее 10 символов.');
+                valid = false;
+            }
+    
+            if (!valid) {
+                responseText.textContent = 'Исправьте ошибки перед отправкой.';
                 responseText.style.color = 'red';
                 return;
             }
     
-            // Если валидация пройдена — отправляем данные на сервер
             try {
-                const res = await fetch('/feedback', {
+                // Отправляем POST-запрос на сервер
+                const res = await fetch('https://afworks-portfolio.onrender.com/feedback', { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, message }),
                 });
     
+                // Обрабатываем ответ от сервера
                 if (res.ok) {
-                    responseText.textContent = 'Ваше сообщение успешно отправлено!';
-                    responseText.style.color = 'green';
+                    responseText.textContent = 'Обратная связь получена!'; // Успешный ответ
+                    responseText.style.color = 'green'; 
                 } else {
-                    const errorMessage = await res.text();
-                    responseText.textContent = `Ошибка сервера: ${errorMessage}`;
+                    // Если сервер вернул ошибку
+                    const errorMessage = await res.text(); // Получаем сообщение об ошибке
+                    responseText.textContent = `Ошибка отправки данных: ${errorMessage}`;
                     responseText.style.color = 'red';
                 }
             } catch (error) {
-                responseText.textContent = `Ошибка сети: ${error.message}`;
+                // Обработка сетевых ошибок или исключений
+                responseText.textContent = `Ошибка отправки данных: ${error.message}`;
                 responseText.style.color = 'red';
             }
     
-            // Очистка формы
+            // Очистка формы после отправки
             form.reset();
         });
-    });
     
+        function createErrorMessage(element, message) {
+            const errorMessage = document.createElement('div');
+            errorMessage.id = `${element.id}-error`;
+            errorMessage.className = 'error-message';
+            errorMessage.style.color = 'red';
+            errorMessage.style.fontSize = '12px';
+            errorMessage.style.marginTop = '5px';
+            errorMessage.textContent = message;
+            element.style.borderColor = 'red';
+            element.insertAdjacentElement('afterend', errorMessage);
+        }
+    });    
 });
