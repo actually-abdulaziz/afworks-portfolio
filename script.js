@@ -21,38 +21,48 @@ document.addEventListener('DOMContentLoaded', function() {
     const responseText = document.getElementById('response'); // Параграф для ответа сервера
 
     form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Отменяем стандартное поведение формы (перезагрузка страницы)
+        e.preventDefault(); 
         
-        // Получаем данные из формы
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+    
+        // Простая валидация
+        if (!name || !email || !message) {
+            responseText.textContent = 'Пожалуйста, заполните все поля.';
+            responseText.style.color = 'red';
+            return;
+        }
+    
+        // Проверка формата email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            responseText.textContent = 'Введите корректный email.';
+            responseText.style.color = 'red';
+            return;
+        }
+    
+        // Далее — отправка запроса
         try {
-            // Отправляем POST-запрос на сервер
             const res = await fetch('https://afworks-portfolio.onrender.com/feedback', { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, message }),
             });
-
-            // Обрабатываем ответ от сервера
+    
             if (res.ok) {
-                responseText.textContent = 'Обратная связь получена!'; // Успешный ответ
-                responseText.style.color = 'green'; 
+                responseText.textContent = 'Обратная связь получена!';
+                responseText.style.color = 'green';
             } else {
-                // Если сервер вернул ошибку
-                const errorMessage = await res.text(); // Получаем сообщение об ошибке
+                const errorMessage = await res.text();
                 responseText.textContent = `Ошибка отправки данных: ${errorMessage}`;
                 responseText.style.color = 'red';
             }
         } catch (error) {
-            // Обработка сетевых ошибок или исключений
-            responseText.textContent = `Ошибка отправки данных: ${error.message}`;
+            responseText.textContent = `Ошибка сети: ${error.message}`;
             responseText.style.color = 'red';
         }
-
-        // Очистка формы после отправки
+    
         form.reset();
     });
 });
